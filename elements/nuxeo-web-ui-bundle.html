@@ -817,3 +817,11 @@
     <nuxeo-spreadsheet-button nx-provider="[[nxProvider]]" columns="[[columns]]"></nuxeo-spreadsheet-button>
   </template>
 </nuxeo-slot-content>
+
+<!-- BULK EDIT -->
+
+<nuxeo-slot-content name="bulkEditResultsAction" slot="RESULTS_SELECTION_ACTIONS" order="10">
+  <template>
+    <nuxeo-bulk-edit-button selected-documents="[[selectedItems]]"></nuxeo-bulk-edit-button>
+  </template>
+</nuxeo-slot-content>
