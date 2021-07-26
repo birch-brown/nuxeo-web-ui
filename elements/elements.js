@@ -296,4 +296,7 @@ import './nuxeo-csv-export/nuxeo-csv-export-button.js';
 // Nuxeo Grid
 import './nuxeo-grid/nuxeo-grid.js';
 
+// Bulk Edit
+import './nuxeo-bulk-edit/nuxeo-bulk-edit-button.js';
+
 import './nuxeo-sardine.js';
