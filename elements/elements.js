@@ -298,5 +298,6 @@ import './nuxeo-grid/nuxeo-grid.js';
 
 // Bulk Edit
 import './nuxeo-bulk-edit/nuxeo-bulk-edit-button.js';
+import './nuxeo-bulk-edit/nuxeo-bulk-widget.js';
 
 import './nuxeo-sardine.js';
