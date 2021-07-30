@@ -16,10 +16,13 @@ limitations under the License.
 */
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
 import '@nuxeo/nuxeo-ui-elements/actions/nuxeo-action-button-styles.js';
 import { I18nBehavior } from '@nuxeo/nuxeo-ui-elements/nuxeo-i18n-behavior.js';
 import { FiltersBehavior } from '@nuxeo/nuxeo-ui-elements/nuxeo-filters-behavior.js';
+import '@nuxeo/nuxeo-ui-elements/widgets/nuxeo-dialog.js';
 import '@nuxeo/nuxeo-ui-elements/widgets/nuxeo-tooltip.js';
+import '../document/nuxeo-document-form-layout.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
 /**
@@ -34,14 +37,39 @@ class NuxeoBulkEditButton extends mixinBehaviors([I18nBehavior, FiltersBehavior]
 
   static get template() {
     return html`
-      <style include="nuxeo-action-button-styles"></style>
+      <style include="nuxeo-action-button-styles">
+        nuxeo-dialog {
+          height: 100%;
+          max-height: var(--nuxeo-document-form-popup-max-height, 60vh);
+          min-width: var(--nuxeo-document-form-popup-min-width, 915px);
+          margin: 0;
+        }
+
+        .container {
+          height: 100%;
+          width: 100%;
+          margin: 0;
+          padding: 0;
+        }
+      </style>
       <template is="dom-if" if="[[_isAvailable(selectedDocuments)]]">
-        <div class="action" on-tap="_doBulkEdit">
+        <div class="action" on-tap="_openDialog">
           <paper-icon-button noink id="diff" icon="polymer" aria-labelledby="label"></paper-icon-button>
           <span class="label" hidden$="[[!showLabel]]" id="label">[[_label]]</span>
           <nuxeo-tooltip position="[[tooltipPosition]]">[[_label]]</nuxeo-tooltip>
         </div>
       </template>
+
+      <nuxeo-dialog id="dialog" no-auto-focus with-backdrop modal>
+        <div class="container">
+          <nuxeo-document-form-layout
+            id="layout"
+            document="[[document]]"
+            layout="default"
+            on-document-updated="_closeDialog"
+          ></nuxeo-document-form-layout>
+        </div>
+      </nuxeo-dialog>
     `;
   }
 
@@ -66,6 +94,12 @@ class NuxeoBulkEditButton extends mixinBehaviors([I18nBehavior, FiltersBehavior]
         type: String,
         computed: '_computeLabel(i18n)',
       },
+      document: {
+        type: Object,
+        value: {
+          type: 'bulk',
+        },
+      },
     };
   }
 
@@ -73,9 +107,12 @@ class NuxeoBulkEditButton extends mixinBehaviors([I18nBehavior, FiltersBehavior]
     return this.selectedDocuments && this.selectedDocuments.length > 1;
   }
 
-  _doBulkEdit() {
-    // console.log('doing bulk edit on the following documents:');
-    // console.log(this.selectedDocuments);
+  _openDialog() {
+    this.$.dialog.open();
+  }
+
+  _closeDialog() {
+    this.$.dialog.close();
   }
 
   _computeLabel() {
